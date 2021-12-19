@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Bentuk;
 
 class BentukController extends Controller
 {
@@ -13,7 +14,8 @@ class BentukController extends Controller
      */
     public function index()
     {
-        //
+        $bentuk = Bentuk::orderBy('created_at', 'desc')->paginate(10);
+        return view('pengaturan.bentuk.index',compact('bentuk'));
     }
 
     /**
@@ -34,7 +36,9 @@ class BentukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(['nama_bentuk' => 'required']);
+        Bentuk::create($validate);
+        return redirect()->route('bentuks.index')->with('success','Bentuk Arsip berhasil ditambahkan');
     }
 
     /**
@@ -68,7 +72,11 @@ class BentukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Bentuk::whereId($id)->update([
+           'nama_bentuk' => $request->edit_nama_bentuk
+        ]);
+
+        return redirect()->route('bentuks.index')->with('update', 'Bentuk Arsip berhasil diubah');
     }
 
     /**
@@ -79,6 +87,10 @@ class BentukController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Bentuk::findOrFail($id);
+        $delete->delete();
+
+        return redirect()->route('bentuks.index')->with('delete', 'Bentuk Arsip berhasil dihapus');
+
     }
 }

@@ -9,14 +9,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="formEditIndeks" action="" class="needs-validation" novalidate="" method="POST">
+                <form id="formEditBentuk" action="" class="needs-validation" novalidate="" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="form-group">
-                        <label>Nama Indeks Arsip</label>
-                        <input name="edit_nama_indeks" id="editNamaIndeks" type="text" class="form-control form-control-sm" required="">
+                        <label>Nama Bentuk Arsip</label>
+                        <input name="edit_nama_bentuk" id="editNamaBentuk" type="text" class="form-control form-control-sm" required="">
                         <div class="invalid-feedback">
-                            Apa nama indeks arsip nya?
+                            Apa nama bentuk arsip nya?
                         </div>
                     </div>
             </div>
@@ -28,3 +28,4 @@
         </div>
     </div>
 </div>
+

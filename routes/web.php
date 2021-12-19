@@ -21,4 +21,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('indeks', 'IndeksController');
+Route::resource('indeks', 'IndeksController')->except(['create','edit']);
+Route::resource('tingkat_perkembangans', 'TingkatPerkembanganController')->except(['create','edit']);
+Route::resource('bentuks', 'BentukController')->except(['create','edit']);
+Route::resource('keterangans', 'KeteranganController')->except(['create','edit']);
+
