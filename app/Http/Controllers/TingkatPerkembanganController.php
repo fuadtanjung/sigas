@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Tingkatperkembangan;
 
 class TingkatPerkembanganController extends Controller
 {
@@ -13,7 +14,8 @@ class TingkatPerkembanganController extends Controller
      */
     public function index()
     {
-        //
+        $tkt_perkembangan = Tingkatperkembangan::orderBy('created_at', 'desc')->paginate(10);
+        return view('pengaturan.tingkat_perkembangan.index',compact('tkt_perkembangan'));
     }
 
     /**
@@ -34,7 +36,9 @@ class TingkatPerkembanganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(['nama_tingkat_perkembangan' => 'required']);
+        Tingkatperkembangan::create($validate);
+        return redirect()->route('tingkat_perkembangans.index')->with('success','Tingkat Perkembangan Arsip berhasil ditambahkan');
     }
 
     /**
@@ -68,7 +72,11 @@ class TingkatPerkembanganController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Tingkatperkembangan::whereId($id)->update([
+           'nama_tingkat_perkembangan' => $request->edit_nama_tkt_perkembangan
+        ]);
+
+         return redirect()->route('tingkat_perkembangans.index')->with('update', 'Tingkat Perkembangan Arsip berhasil diubah');
     }
 
     /**
@@ -79,6 +87,9 @@ class TingkatPerkembanganController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = TingkatPerkembangan::findOrFail($id);
+        $delete->delete();
+
+        return redirect()->route('tingkat_perkembangans.index')->with('delete', 'Tingkat Perkembangan Arsip berhasil dihapus');
     }
 }
