@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Keterangan;
 
 class KeteranganController extends Controller
 {
@@ -13,7 +14,8 @@ class KeteranganController extends Controller
      */
     public function index()
     {
-        //
+        $keterangan = Keterangan::orderBy('created_at', 'desc')->paginate(10);
+        return view('pengaturan.keterangan.index',compact('keterangan'));
     }
 
     /**
@@ -34,7 +36,9 @@ class KeteranganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate(['nama_keterangan' => 'required']);
+        Keterangan::create($validate);
+        return redirect()->route('keterangans.index')->with('success','Keterangan Arsip berhasil ditambahkan');
     }
 
     /**
@@ -68,7 +72,11 @@ class KeteranganController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+          Keterangan::whereId($id)->update([
+           'nama_keterangan' => $request->edit_nama_keterangan
+        ]);
+
+         return redirect()->route('keterangans.index')->with('update', 'Keterangan Arsip berhasil diubah');
     }
 
     /**
@@ -79,6 +87,9 @@ class KeteranganController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Keterangan::findOrFail($id);
+        $delete->delete();
+
+        return redirect()->route('keterangans.index')->with('delete', 'Keterangan Arsip berhasil dihapus');
     }
 }
