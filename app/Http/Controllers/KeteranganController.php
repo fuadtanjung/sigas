@@ -14,7 +14,7 @@ class KeteranganController extends Controller
      */
     public function index()
     {
-        $keterangan = Keterangan::orderBy('created_at', 'desc')->paginate(10);
+        $keterangan = Keterangan::latest()->get();
         return view('pengaturan.keterangan.index',compact('keterangan'));
     }
 

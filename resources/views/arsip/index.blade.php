@@ -3,40 +3,26 @@
 @push('styles_top')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatable/datatables.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/izitoast/iziToast.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/select2/select2.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datepicker/bootstrap-datepicker.min.css') }}" />
 @endpush
 
 @section('content')
 <section class="section">
     <div class="section-header">
-        <h1>Keterangan Arsip</h1>
-        <div class="section-header-breadcrumb">
-            <div class="breadcrumb-item active"><a href="#">Pengaturan</a></div>
-            <div class="breadcrumb-item">Keterangan</div>
-        </div>
+        <h1>Arsip</h1>
     </div>
     <section>
         <div class="card">
             <div class="card-header">
-                <h4>Form Keterangan Arsip</h4>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                    aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fas fa-file-alt mr-2"></i>Form Arsip
+                </button>
             </div>
-
-            <form action="{{ route('keterangans.store') }}" class="needs-validation" novalidate="" method="POST">
-                @csrf
-                @method('POST')
-                <div class="ml-5 mr-5">
-                    <div class="form-group">
-                        <label>Nama Keterangan Arsip</label>
-                        <input name="nama_keterangan" type="text" class="form-control form-control-sm" required="">
-                        <div class="invalid-feedback">
-                            Apa nama keterangan arsip nya?
-                        </div>
-                    </div>
-                </div>
-                <div class="text-right mr-5 mb-3">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle mr-1"></i>
-                        Tambah</button>
-                </div>
-            </form>
+            <div class="collapse" id="collapseExample">
+                @include('arsip.includes.form')
+            </div>
         </div>
     </section>
     <div class="section-body">
@@ -44,36 +30,40 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Table Keterangan Arsip</h4>
+                        <h4>Table Indeks Arsip</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped" id="myTable">
-                                <thead style="font-size: 16px">
+                            <table class="table table-striped table-bordered" id="myTable">
+                                <thead>
                                     <tr>
                                         <th class="text-center">
                                             No.
                                         </th>
-                                        <th>Nama Keterangan</th>
+                                        <th>Indeks</th>
+                                        <th>Deskripsi</th>
+                                        <th>Waktu</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($keterangan as $data_keterangan )
+                                    @foreach ($arsip as $data_indeks )
                                     <tr>
                                         <td style="width: 5%" class="text-center">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td style="font-size: 15px">{{ $data_keterangan->nama_keterangan }}</td>
+                                        <td style="font-size: 15px">{{ $data_indeks->indeks->nama_indeks }}</td>
+                                        <td style="font-size: 15px">{{ $data_indeks->deskripsi }}</td>
+                                        <td style="font-size: 15px">{{ $data_indeks->tahun }}</td>
                                         <td>
-                                            <button id="edit_keterangan" data-id={{ $data_keterangan->id }} data-nama="{{
-                                                $data_keterangan->nama_keterangan }}" class="btn btn-primary float-left"
+                                            <button id="edit_indeks" data-id={{ $data_indeks->id }} data-nama="{{
+                                                $data_indeks->nama_indeks }}" class="btn btn-primary float-left"
                                                 data-toggle="modal" data-target="#exampleModal">
                                                 <i class="fas fa-edit"></i> Edit
                                             </button>
 
                                             <form class="delete"
-                                                action="{{ route('keterangans.destroy',['keterangan'=>$data_keterangan->id]) }}"
+                                                action="{{ route('indeks.destroy',['indek'=>$data_indeks->id]) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')
@@ -93,12 +83,14 @@
         </div>
     </div>
 </section>
-@include('pengaturan.keterangan.modal')
 @endsection
 
 @push('styles_bottom')
-<script type="text/javascript" src="{{ asset('assets/js/datatable/datatables.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/izitoast/iziToast.min.js') }}"></script>
+<script src="{{ asset('assets/js/datatable/datatables.min.js') }}"></script>
+<script src="{{ asset('assets/js/izitoast/iziToast.min.js') }}"></script>
+<script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
+<script src="{{ asset('assets/js/datepicker/bootstrap-datepicker.min.js') }}"></script>
 <script src=" {{ asset('assets/js/page/bootstrap-modal.js')}}"></script>
 @endpush
 
@@ -141,14 +133,24 @@
     @endif
     });
 
-    $(document).on("click","#edit_keterangan",function(){
-        var keterangan = $(this).data('id');
+
+    $(document).on("click","#edit_indeks",function(){
+        var indek = $(this).data('id');
         var nama = $(this).data('nama');
         var base = "{{ url('/') }}";
-        var link = base+"/keterangans/"+keterangan;
+        var link = base+"/indeks/"+indek;
 
-        $("#formEditKeterangan").attr('action',link);
-        $("#editNamaKeterangan").val(nama);
+        $("#formEditIndeks").attr('action',link);
+        $("#editNamaIndeks").val(nama);
+    });
+
+    $('#datepicker').each(function () {
+        $(this).datepicker({
+        autoclose: true,
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years"
+        });
     });
 </script>
 @endpush

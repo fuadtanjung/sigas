@@ -9,4 +9,8 @@ class Tingkatperkembangan extends Model
     protected $table="tingkatperkembangans";
     protected $primaryKey="id";
     protected $fillable=['nama_tingkat_perkembangan'];
+
+      public function arsip(){
+        return $this->hasOne(Arsip::class);
+    }
 }

@@ -14,7 +14,7 @@ class BentukController extends Controller
      */
     public function index()
     {
-        $bentuk = Bentuk::orderBy('created_at', 'desc')->paginate(10);
+        $bentuk = Bentuk::latest()->get();
         return view('pengaturan.bentuk.index',compact('bentuk'));
     }
 

@@ -14,12 +14,13 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap/bootstrap.min.css') }}">
     <script src="{{ asset('assets/js/fontawesome.js') }}" crossorigin="anonymous"></script>
 
+    @stack('styles_top')
+    @stack('scripts_top')
+
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/components.css') }}">
 
-    @stack('styles_top')
-    @stack('scripts_top')
 </head>
 
 <body>
@@ -55,11 +56,14 @@
     <script src="{{ asset('assets/js/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('assets/js/stisla.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts.js') }}"></script>
-    <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     @stack('styles_bottom')
     @stack('scripts_bottom')
+
+    <script src="{{ asset('assets/js/scripts.js') }}"></script>
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+
 
 </body>
 

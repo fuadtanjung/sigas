@@ -14,7 +14,7 @@ class TingkatPerkembanganController extends Controller
      */
     public function index()
     {
-        $tkt_perkembangan = Tingkatperkembangan::orderBy('created_at', 'desc')->paginate(10);
+        $tkt_perkembangan = Tingkatperkembangan::latest()->get();
         return view('pengaturan.tingkat_perkembangan.index',compact('tkt_perkembangan'));
     }
 

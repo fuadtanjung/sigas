@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles_top')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatable/datatables.min.css') }}" />
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/izitoast/iziToast.min.css') }}" />
 @endpush
 
@@ -97,7 +97,7 @@
 @endsection
 
 @push('styles_bottom')
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.3/datatables.min.js"></script>
+<script type="text/javascript" src="{{ asset('assets/js/datatable/datatables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assets/js/izitoast/iziToast.min.js') }}"></script>
 <script src=" {{ asset('assets/js/page/bootstrap-modal.js')}}"></script>
 @endpush

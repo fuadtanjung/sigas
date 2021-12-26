@@ -14,7 +14,7 @@ class IndeksController extends Controller
      */
     public function index()
     {
-        $indeks = Indeks::orderBy('created_at', 'desc')->paginate(10);
+        $indeks = Indeks::latest()->get();
         return view('pengaturan.indeks.index',compact('indeks'));
     }
 
