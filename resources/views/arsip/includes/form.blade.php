@@ -5,26 +5,25 @@
             <div class="col-12 col-md-6 col-lg-6">
                 <div class="form-group">
                     <label>Indeks Arsip</label>
-                    <select class="form-control select2" name="indeks_id">
-                        @foreach ($indeks as $idx )
-                        <option value="{{ $idx->id }}">{{ $idx->nama_indeks }}</option>
-                        @endforeach
-                    </select>
+                    <textarea name="indeks" class="form-control" required=""></textarea>
+                    <div class="invalid-feedback">
+                        Apa indeks arsip nya?
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label>Deskripsi Arsip</label>
-                    <textarea name="deskripsi" class="form-control"></textarea>
+                    <textarea name="deskripsi" class="form-control" required=""></textarea>
                     <div class="invalid-feedback">
-                        Apa deskripsi nya?
+                        Apa deskripsi arsip nya?
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Tahun</label>
-                    <input name="tahun" type="text" class="form-control" required="" id="datepicker">
+                    <input name="tahun" type="text" class="form-control datepicker" required="" id="datepicker">
                     <div class="invalid-feedback">
-                        kapan tahunnya?
+                        Kapan tahun arsip nya?
                     </div>
                 </div>
 
@@ -39,7 +38,10 @@
 
                 <div class="form-group">
                     <label>Jumlah</label>
-                    <input name="jumlah" type="number" class="form-control">
+                    <input name="jumlah" type="number" class="form-control" required="">
+                    <div class="invalid-feedback">
+                        Berapa jumlah arsip nya?
+                    </div>
                 </div>
 
                 <div class="form-group">

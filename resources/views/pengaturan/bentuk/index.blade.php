@@ -118,22 +118,11 @@
         });
     @endif
 
-    @if(Session::has('update'))
-        iziToast.info({
-        title: 'Berhasil',
-        position: 'topRight',
-        message: '{{ Session::get('update') }}',
-        timeout :'2500',
-        transitionIn: 'flipInX',
-        transitionOut: 'flipOutX'
-        });
-    @endif
-
-    @if(Session::has('delete'))
+    @if(Session::has('error'))
         iziToast.error({
-        title: 'Berhasil',
+        title: 'Gagal',
         position: 'topRight',
-        message: '{{ Session::get('delete') }}',
+        message: '{{ Session::get('error') }}',
         timeout :'2500',
         transitionIn: 'flipInX',
         transitionOut: 'flipOutX'

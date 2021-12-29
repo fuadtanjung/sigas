@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Arsip;
 use Illuminate\Http\Request;
 use App\Model\Bentuk;
 
@@ -76,7 +77,7 @@ class BentukController extends Controller
            'nama_bentuk' => $request->edit_nama_bentuk
         ]);
 
-        return redirect()->route('bentuks.index')->with('update', 'Bentuk Arsip berhasil diubah');
+        return redirect()->route('bentuks.index')->with('success', 'Bentuk Arsip berhasil diubah');
     }
 
     /**
@@ -87,10 +88,14 @@ class BentukController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Bentuk::findOrFail($id);
-        $delete->delete();
-
-        return redirect()->route('bentuks.index')->with('delete', 'Bentuk Arsip berhasil dihapus');
-
+        if(Arsip::where('bentuk_id',$id)->count() === 0){
+            $delete = Bentuk::findOrFail($id);
+            $delete->delete();
+            return redirect()->route('bentuks.index')->with('success', 'Bentuk Arsip berhasil dihapus');
+        }
+        else
+        {
+        return redirect()->route('bentuks.index')->with('error', 'Gagal Bentuk Arsip dipakai dalam data Arsip!');
+        }
     }
 }

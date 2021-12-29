@@ -23,9 +23,6 @@ class Arsip extends Model
         buku,
         sampul'];
 
-    public function indeks(){
-        return $this->belongsTo(Indeks::class,'indeks_id','id');
-    }
     public function tingkatperkembangan(){
         return $this->belongsTo(Tingkatperkembangan::class,'tingkat_perkembangan_id','id');
     }

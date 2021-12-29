@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Model\Arsip;
 use App\Model\Keterangan;
+use Illuminate\Http\Request;
 
 class KeteranganController extends Controller
 {
@@ -76,7 +77,7 @@ class KeteranganController extends Controller
            'nama_keterangan' => $request->edit_nama_keterangan
         ]);
 
-         return redirect()->route('keterangans.index')->with('update', 'Keterangan Arsip berhasil diubah');
+         return redirect()->route('keterangans.index')->with('success', 'Keterangan Arsip berhasil diubah');
     }
 
     /**
@@ -87,9 +88,12 @@ class KeteranganController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Keterangan::findOrFail($id);
-        $delete->delete();
-
-        return redirect()->route('keterangans.index')->with('delete', 'Keterangan Arsip berhasil dihapus');
+        if(Arsip::where('keterangan_id',$id)->count() === 0){
+            $delete = Keterangan::findOrFail($id);
+            $delete->delete();
+            return redirect()->route('keterangans.index')->with('success', 'Keterangan Arsip berhasil dihapus');
+            }else{
+        return redirect()->route('keterangans.index')->with('error', 'Gagal Keterangan Arsip dipakai dalam data Arsip!');
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Arsip;
 use Illuminate\Http\Request;
 use App\Model\Tingkatperkembangan;
 
@@ -76,7 +77,7 @@ class TingkatPerkembanganController extends Controller
            'nama_tingkat_perkembangan' => $request->edit_nama_tkt_perkembangan
         ]);
 
-         return redirect()->route('tingkat_perkembangans.index')->with('update', 'Tingkat Perkembangan Arsip berhasil diubah');
+         return redirect()->route('tingkat_perkembangans.index')->with('success', 'Tingkat Perkembangan Arsip berhasil diubah');
     }
 
     /**
@@ -87,9 +88,13 @@ class TingkatPerkembanganController extends Controller
      */
     public function destroy($id)
     {
-        $delete = TingkatPerkembangan::findOrFail($id);
-        $delete->delete();
-
-        return redirect()->route('tingkat_perkembangans.index')->with('delete', 'Tingkat Perkembangan Arsip berhasil dihapus');
+        if(Arsip::where('tingkat_perkembangan_id',$id)->count() === 0){
+            $delete = TingkatPerkembangan::findOrFail($id);
+            $delete->delete();
+            return redirect()->route('tingkat_perkembangans.index')->with('success', 'Tingkat Perkembangan Arsip berhasil dihapus');
+        }
+        else{
+        return redirect()->route('tingkat_perkembangans.index')->with('error', 'Gagal Tingkat Perkembangan Arsip dipakai dalam data Arsip!');
+        }
     }
 }

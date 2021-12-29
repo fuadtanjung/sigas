@@ -12,7 +12,6 @@
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i>
                     <span>Pengaturan</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ (request()->is('indeks')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('indeks.index') }}">Indeks</a></li>
                     <li class="{{ (request()->is('tingkat_perkembangans')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('tingkat_perkembangans.index') }}">Tingkat Perkembangan</a></li>
                     <li class="{{ (request()->is('bentuks')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('bentuks.index') }}">Bentuk</a></li>
                     <li class="{{ (request()->is('keterangans')) ? 'active' : '' }}"><a class="nav-link" href="{{ route('keterangans.index') }}">Keterangan</a></li>

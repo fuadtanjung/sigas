@@ -30,11 +30,17 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Table Indeks Arsip</h4>
+                        <h4>Table Arsip</h4>
                     </div>
+
+                    <div class="ml-4">
+                        <a href="{{ route('export') }}" class="btn btn-primary text-white" type="button">
+                            <i class="fas fa-file-excel mr-2"></i>Export Excel</a>
+                    </div>
+
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" id="myTable">
+                        <div>
+                            <table class="table table-striped table-bordered" id="datatable">
                                 <thead>
                                     <tr>
                                         <th class="text-center">
@@ -47,33 +53,55 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($arsip as $data_indeks )
+                                    {{-- @foreach ($arsip as $data )
                                     <tr>
-                                        <td style="width: 5%" class="text-center">
+                                        <td style="width : 1%" class="text-center">
                                             {{ $loop->iteration }}
                                         </td>
-                                        <td style="font-size: 15px">{{ $data_indeks->indeks->nama_indeks }}</td>
-                                        <td style="font-size: 15px">{{ $data_indeks->deskripsi }}</td>
-                                        <td style="font-size: 15px">{{ $data_indeks->tahun }}</td>
-                                        <td>
-                                            <button id="edit_indeks" data-id={{ $data_indeks->id }} data-nama="{{
-                                                $data_indeks->nama_indeks }}" class="btn btn-primary float-left"
+                                        <td style="width : 17%">{{ $data->indeks }}</td>
+                                        <td style="width: 50%">{{ $data->deskripsi }}</td>
+                                        <td style="width : 5%">{{ $data->tahun }}</td>
+                                        <td style="width : 27%">
+
+                                            <button id="detail" data-tingkatperkembangan={{
+                                                $data->tingkatperkembangan->nama_tingkat_perkembangan }}
+                                                data-bentuk={{ $data->bentuk->nama_bentuk }}
+                                                data-keterangan={{ $data->keterangan->nama_keterangan }}
+                                                data-indeks="{{$data->indeks }}"
+                                                data-deskripsi="{{$data->deskripsi }}"
+                                                data-jumlah="{{$data->jumlah }}"
+                                                data-tahun="{{$data->jumlah }}"
+                                                data-rak="{{$data->rak }}"
+                                                data-roll_o_pack="{{$data->roll_o_pack }}"
+                                                data-boks="{{$data->boks }}"
+                                                data-bungkus="{{$data->bungkus }}"
+                                                data-buku="{{$data->buku }}"
+                                                data-sampul="{{$data->sampul }}"
+                                                class="btn float-left btn-primary btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#detailModal">
+                                                <i class="fas fa-eye"></i>
+                                                Detail
+                                            </button>
+
+                                            <button id="edit_indeks" data-id={{ $data->id }} data-nama="{{
+                                                $data->indeks }}" class="btn float-left btn-primary btn-sm ml-2"
                                                 data-toggle="modal" data-target="#exampleModal">
-                                                <i class="fas fa-edit"></i> Edit
+                                                <i class="fas fa-edit"></i>Edit
                                             </button>
 
                                             <form class="delete"
-                                                action="{{ route('indeks.destroy',['indek'=>$data_indeks->id]) }}"
+                                                action="{{ route('indeks.destroy',['indek'=>$data->id]) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" value="Delete"
-                                                    class="btn btn-danger float-left text-white ml-2"><i
-                                                        class="fas fa-trash"></i> Hapus </button>
-                                            </form>
+                                                    class="btn btn-danger btn-sm text-white float-left ml-2"><i
+                                                        class="fas fa-trash"></i>Hapus
+                                                </button>
                                         </td>
                                     </tr>
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>
@@ -83,74 +111,253 @@
         </div>
     </div>
 </section>
+@include('arsip.includes.modal')
+@include('arsip.includes.edit')
 @endsection
 
 @push('styles_bottom')
 <script src="{{ asset('assets/js/datatable/datatables.min.js') }}"></script>
 <script src="{{ asset('assets/js/izitoast/iziToast.min.js') }}"></script>
 <script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
-<script src="{{ asset('assets/js/select2/select2.min.js') }}"></script>
 <script src="{{ asset('assets/js/datepicker/bootstrap-datepicker.min.js') }}"></script>
 <script src=" {{ asset('assets/js/page/bootstrap-modal.js')}}"></script>
 @endpush
 
 @push('scripts_bottom')
-<script>
-    $(document).ready(function(){
-    $('#myTable').DataTable();
+<script type="text/javascript">
+    function loadData() {
+                $('#datatable').dataTable({
+                    "ajax": "{{ url('/arsip/data') }}",
+                    "columns": [
+                        { "data": "id" },
+                        { "data": "indeks" },
+                        { "data": "deskripsi" },
+                        { "data": "tahun" },
+                        {
+                            render: function() {
+                                return '<a href="#" id="detail" class="btn btn-success btn-sm"><i class="fas fa-eye mr-1"></i> Detail</a> &nbsp' +
+                                    '<a href="#" id="edit" class="btn btn-primary btn-sm"><i class="fas fa-edit mr-1"></i> Edit</a> &nbsp' +
+                                    '<a href="#" id="delete" class="btn btn-danger btn-sm"><i class="fa fa-trash mr-1"></i> Hapus</a>'
+                            }
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            width: "1%",
+                            targets: [0]
+                        },
+                        {
+                            width: "15%",
+                            targets: [1]
+                        },
+                        {
+                            width: "47%",
+                            targets: [2]
+                        },
+                        {
+                            width: "5%",
+                            targets: [3]
+                        },
+                        {
+                            width: "32%",
+                            targets: [4]
+                        },
+                    ],
+                    order: [ [0, 'desc'] ]
+                });
+            }
 
-    @if(Session::has('success'))
-        iziToast.success({
-        title: 'Berhasil',
-        position: 'topRight',
-        message: '{{ Session::get('success') }}',
-        timeout :'2500',
-        transitionIn: 'flipInX',
-        transitionOut: 'flipOutX'
-        });
-    @endif
+            $(window).on('load', function () {
+                loadData();
 
-    @if(Session::has('update'))
-        iziToast.info({
-        title: 'Berhasil',
-        position: 'topRight',
-        message: '{{ Session::get('update') }}',
-        timeout :'2500',
-        transitionIn: 'flipInX',
-        transitionOut: 'flipOutX'
-        });
-    @endif
+                {{--menampilkan detail--}}
+                $('#datatable tbody').on('click', '#detail', function (e) {
+                var table = $('#datatable').DataTable();
+                var data = table.row( $(this).parents('tr') ).data();
+                $('#indeks').val(data.indeks);
+                $('#deskripsi').val(data.deskripsi);
+                $('#tahun').val(data.tahun);
+                $('#tingkat_perkembangan').val(data.tingkatperkembangan.nama_tingkat_perkembangan);
+                $('#jumlah').val(data.jumlah);
+                $('#keterangan').val(data.keterangan.nama_keterangan);
+                $('#bentuk').val(data.bentuk.nama_bentuk);
+                $('#rak').val(data.rak);
+                $('#roll_o_pack').val(data.roll_o_pack);
+                $('#boks').val(data.boks);
+                $('#bungkus').val(data.bungkus);
+                $('#buku').val(data.buku);
+                $('#sampul').val(data.sampul);
+                $('#detailModal').modal('toggle');
+                } );
 
-    @if(Session::has('delete'))
-        iziToast.error({
-        title: 'Berhasil',
-        position: 'topRight',
-        message: '{{ Session::get('delete') }}',
-        timeout :'2500',
-        transitionIn: 'flipInX',
-        transitionOut: 'flipOutX'
-        });
-    @endif
-    });
+               $('#datatable tbody').on('click', '#edit', function (e) {
+                    var table = $('#datatable').DataTable();
+                    var data = table.row( $(this).parents('tr') ).data();
+                    var base = "{{ url('/') }}";
+                    var link = base+"/arsip/edit/"+ data.id;
+                    $('#indeks_edit').val(data.indeks);
+                    $('#deskripsi_edit').val(data.deskripsi);
+                    $('#tahun_edit').val(data.tahun);
+                    $('#tingkat_perkembangan_edit').val(data.tingkatperkembangan.id).change();
+                    $('#jumlah_edit').val(data.jumlah);
+                    $('#keterangan_edit').val(data.keterangan.id).change();
+                    $('#bentuk_edit').val(data.bentuk.id).change();
+                    $('#rak_edit').val(data.rak);
+                    $('#roll_o_pack_edit').val(data.roll_o_pack);
+                    $('#boks_edit').val(data.boks);
+                    $('#bungkus_edit').val(data.bungkus);
+                    $('#buku_edit').val(data.buku);
+                    $('#sampul_edit').val(data.sampul);
+                    $('#editModal').modal('toggle');
+                    $("#formEditArsip").attr('action',link);
+                } );
+
+                @if(Session::has('success'))
+                    iziToast.success({
+                    title: 'Berhasil',
+                    position: 'topRight',
+                    message: '{{ Session::get('success') }}',
+                    timeout :'2500',
+                    transitionIn: 'flipInX',
+                    transitionOut: 'flipOutX'
+                    });
+                    @endif
+
+                @if(Session::has('error'))
+                    iziToast.error({
+                    title: 'Gagal',
+                    position: 'topRight',
+                    message: '{{ Session::get('error') }}',
+                    timeout :'2500',
+                    transitionIn: 'flipInX',
+                    transitionOut: 'flipOutX'
+                    });
+                    @endif
+
+                // LIST
+
+                $.ajax({
+                    url: '{{ url('list/tingkat') }}',
+                    dataType: "json",
+                    success: function (data) {
+                    var tingkat = jQuery.parseJSON(JSON.stringify(data));
+                    $.each(tingkat, function (k, v) {
+                    $('#tingkat_perkembangan_edit').append($('<option>', {value: v.id}).text(v.nama_tingkat_perkembangan))
+                    })
+                    }
+                });
+                $.ajax({
+                    url: '{{ url('list/bentuk') }}',
+                    dataType: "json",
+                    success: function (data) {
+                    var bentuk = jQuery.parseJSON(JSON.stringify(data));
+                    $.each(bentuk, function (k, v) {
+                    $('#bentuk_edit').append($('<option>', {value: v.id}).text(v.nama_bentuk))
+                    })
+                    }
+                });
+                $.ajax({
+                    url: '{{ url('list/tingkat') }}',
+                    dataType: "json",
+                    success: function (data) {
+                    var keterangan = jQuery.parseJSON(JSON.stringify(data));
+                    $.each(keterangan, function (k, v) {
+                    $('#keterangan_edit').append($('<option>', {value: v.id}).text(v.nama_keterangan))
+                    })
+                    }
+                });
 
 
-    $(document).on("click","#edit_indeks",function(){
-        var indek = $(this).data('id');
-        var nama = $(this).data('nama');
-        var base = "{{ url('/') }}";
-        var link = base+"/indeks/"+indek;
+                $('#datatable tbody').on('click', '#delete', function (e) {
+                    var table = $('#datatable').DataTable();
+                    var data = table.row( $(this).parents('tr') ).data();
+                    iziToast.question({
+                        timeout: 5000,
+                        close: false,
+                        overlay: true,
+                        displayMode: 'once',
+                        id: 'question',
+                        zindex: 999,
+                        title: 'Konfirmasi',
+                        message: 'Anda Yakin Menghapus Data Arsip Ini?',
+                        position: 'center',
+                        buttons: [
+                            ['<button><b>Iya!</b></button>', function (instance, toast) {
+                                $.ajax({
+                                    url: "{{ url('/arsip/delete/') }}/" + data.id,
+                                    type: "post",
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                    },
+                                    cache: false,
+                                    success: function (response) {
+                                        var pesan = JSON.parse(response);
+                                        if(pesan.error != null){
+                                            iziToast.error({
+                                                title: 'Gagal',
+                                                position: 'topRight',
+                                                message: pesan.error,
+                                                timeout :'2500',
+                                                transitionIn: 'flipInX',
+                                                transitionOut: 'flipOutX'
+                                            });
+                                            table.destroy();
+                                            loadData();
+                                        }else if(pesan.success != null){
+                                            iziToast.success({
+                                                title: 'Berhasil',
+                                                position: 'topRight',
+                                                message: pesan.success,
+                                                timeout :'2500',
+                                                transitionIn: 'flipInX',
+                                                transitionOut: 'flipOutX'
+                                            });
+                                            table.destroy();
+                                            loadData();
+                                        }
+                                    },
+                                    fail: function () {
+                                        iziToast.error({
+                                            title: 'Gagal',
+                                            message: 'Gagal Menambahkan Data pengguna',
+                                            transitionOut: 'fadeOutUp',
+                                            timeout :'2500',
+                                            transitionIn: 'flipInX',
+                                            transitionOut: 'flipOutX'
+                                        });
+                                    },
+                                });
+                                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                            }, true],
+                            ['<button>Tidak</button>', function (instance, toast) {
+                                iziToast.info({
+                                    title: 'Info',
+                                    position: 'topRight',
+                                    message: 'Data Arsip Tidak Di Hapus',
+                                    timeout :'2500',
+                                    transitionIn: 'flipInX',
+                                    transitionOut: 'flipOutX'
+                                });
+                                instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
 
-        $("#formEditIndeks").attr('action',link);
-        $("#editNamaIndeks").val(nama);
-    });
+                            }],
+                        ],
 
-    $('#datepicker').each(function () {
-        $(this).datepicker({
-        autoclose: true,
+                        onClosing: function(instance, toast, closedBy){
+                            console.info('Closing | closedBy: ' + closedBy);
+                        },
+                        onClosed: function(instance, toast, closedBy){
+                            console.info('Closed | closedBy: ' + closedBy);
+                        }
+                    });
+                });
+            })
+
+        $('.datepicker').datepicker({
         format: "yyyy",
         viewMode: "years",
-        minViewMode: "years"
+        minViewMode: "years",
+        autoclose:true
         });
-    });
 </script>
 @endpush
