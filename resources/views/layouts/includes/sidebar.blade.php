@@ -7,7 +7,7 @@
             <a href="index.html">SG</a>
         </div>
         <ul class="sidebar-menu">
-            <li><a class="nav-link" href="{{ url('arsip') }}"><i class="fas fa-file-alt"></i> <span>Arsip</span></a></li>
+            <li class="{{ (request()->is('arsip')) ? 'active' : '' }}"><a class="nav-link" href="{{ url('arsip') }}"><i class="fas fa-file-alt"></i> <span>Arsip</span></a></li>
             <li class="nav-item dropdown {{ (request()->is('indeks') or request()->is('tingkat_perkembangans') or request()->is('bentuks') or request()->is('keterangans')) ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-th-large"></i>
                     <span>Pengaturan</span></a>
