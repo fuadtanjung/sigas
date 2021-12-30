@@ -155,11 +155,11 @@
                             targets: [2]
                         },
                         {
-                            width: "5%",
+                            width: "3%",
                             targets: [3]
                         },
                         {
-                            width: "32%",
+                            width: "35%",
                             targets: [4]
                         },
                     ],
